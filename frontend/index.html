@@ -24,14 +24,10 @@
     <div class="bg-shape shape-2"></div>
     <div class="bg-shape shape-3"></div>
 
-    <div class="container my-5 content-wrapper">
+    <div class="container my-4 content-wrapper">
         
-        <header class="text-center mb-5 hero-section">
-            <div class="badge-wrapper mb-3">
-                <span class="badge bg-primary-gradient rounded-pill px-3 py-2 text-uppercase tracking-wide shadow-glow">AI Powered</span>
-            </div>
-            <h1 class="display-4 fw-bolder hero-title mb-3">Sistema Multiagente<br><span class="text-gradient">Expertos en Música</span></h1>
-            <p class="lead text-light-50">Explora la teoría, instrumentación y composición con tu equipo musical personal.</p>
+        <header class="text-center mb-4 hero-section">
+            <h1 class="display-4 fw-bolder hero-title mb-0"><span class="text-gradient">HARMONYIA</span> Multiagente</h1>
         </header>
 
         <!-- Navigation Tabs -->
@@ -46,6 +42,11 @@
                     <i class="bi bi-activity me-2"></i>Monitoreo de Agentes
                 </button>
             </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="analytics-tab" data-bs-toggle="pill" data-bs-target="#analytics" type="button" role="tab" aria-controls="analytics" aria-selected="false" onclick="loadAnalytics()">
+                    <i class="bi bi-bar-chart-fill me-2"></i>Métricas y Calidad
+                </button>
+            </li>
         </ul>
 
         <!-- Tab Content -->
@@ -53,29 +54,33 @@
             
             <!-- CHAT TAB -->
             <div class="tab-pane fade show active" id="chat" role="tabpanel" aria-labelledby="chat-tab">
-                <div class="glass-card mb-4" id="inputContainer">
-                    <div class="card-body p-4 p-lg-5">
-                        <label for="taskInput" class="form-label fw-bold text-light mb-3 ms-1"><i class="bi bi-magic text-warning me-2"></i>¿Qué obra maestra musical vamos a visualizar hoy?</label>
-                        <div class="input-group-custom position-relative">
-                            <textarea class="form-control custom-textarea" id="taskInput" rows="4" placeholder='Ej: "Analiza la composición de una balada de rock alternativo para piano y guitarra acústica..."'></textarea>
-                            <div class="glow-effect"></div>
-                        </div>
-                        <div class="d-flex justify-content-end mt-4">
-                            <button id="sendBtn" class="btn btn-primary-gradient btn-lg px-5 shadow-glow" onclick="submitTask()">
-                                <span>Enviar Tarea <i class="bi bi-send-fill ms-2"></i></span>
-                            </button>
+                <div class="glass-card mb-4 d-flex flex-column" style="height: 75vh;">
+                    <!-- Botón de Limpiar Conversación -->
+                    <div class="d-flex justify-content-end p-2 border-bottom border-secondary border-opacity-25">
+                        <button class="btn btn-sm btn-outline-danger border-0 shadow-none d-flex align-items-center" onclick="clearChat()">
+                            <i class="bi bi-trash me-1"></i> Limpiar Conversación
+                        </button>
+                    </div>
+                    
+                    <!-- Contenedor del Historial del Chat -->
+                    <div id="chatHistory" class="flex-grow-1 p-4 overflow-auto d-flex flex-column">
+                        <div class="text-center py-5 text-muted" id="welcomeMessage">
+                            <i class="bi bi-music-note-beamed display-1 text-light-50 mb-3 opacity-25"></i>
+                            <p class="mb-0 text-light-50 fw-bold fs-5">¿Qué obra maestra musical vamos a visualizar hoy?</p>
+                            <span class="small text-muted">Escribe un género o tarea abajo para despertar a la mente colmena.</span>
                         </div>
                     </div>
-                </div>
 
-                <!-- Resultado Final -->
-                <div id="finalResponseWrapper" class="collapse">
-                    <h3 class="mb-3 fw-bold section-title"><i class="bi bi-music-note-list text-primary me-2"></i>Reporte Final</h3>
-                    <div class="glass-card result-card">
-                        <div class="card-body p-4 p-lg-5">
-                            <div id="finalResponseContent" class="markdown-body">
-                                <!-- El Markdown renderizado se inyecta aquí -->
+                    <!-- Input Inferior -->
+                    <div class="card-footer p-4 border-top border-secondary border-opacity-25 bg-transparent">
+                        <div class="d-flex gap-2">
+                            <div class="input-group-custom position-relative w-100">
+                                <textarea class="form-control custom-textarea m-0 border-0 shadow-none bg-dark bg-opacity-25 text-light p-3" style="border-radius: 12px; resize: none;" id="taskInput" rows="2" placeholder='Ej: "Analiza la composición de una balada de rock alternativo..."' autofocus></textarea>
+                                <div class="glow-effect"></div>
                             </div>
+                            <button id="sendBtn" class="btn btn-primary-gradient px-4 rounded-3 shadow-glow d-flex align-items-center justify-content-center" onclick="submitTask()">
+                                <i class="bi bi-send-fill fs-5"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -83,18 +88,82 @@
 
             <!-- MONITORING TAB -->
             <div class="tab-pane fade" id="monitor" role="tabpanel" aria-labelledby="monitor-tab">
-                <div class="glass-card p-4 p-lg-5">
-                    <h3 class="mb-4 fw-bold section-title"><i class="bi bi-cpu text-info me-2"></i>Registro de Ejecución</h3>
+                <div class="row">
+                    <!-- Lista de Consultas -->
+                    <div class="col-lg-4 mb-4">
+                        <div class="glass-card p-4 h-100">
+                            <h5 class="fw-bold section-title mb-4"><i class="bi bi-list-nested me-2 text-warning"></i>Tus Consultas</h5>
+                            <div class="list-group list-group-flush gap-2" id="questionList">
+                                <p class="text-muted small text-center my-4" id="emptyQuestionsMsg">No hay consultas registradas aún.</p>
+                            </div>
+                        </div>
+                    </div>
                     
-                    <!-- Estado Inicial Vacío -->
-                    <div id="emptyMonitor" class="text-center py-5 text-muted">
-                        <i class="bi bi-hdd-network display-1 text-light-50 mb-3 opacity-25"></i>
-                        <p class="mb-0 text-light-50">Las mentes maestras están a la espera. Envía una tarea en la pestaña anterior.</p>
+                    <!-- Pasos de Agentes -->
+                    <div class="col-lg-8 mb-4">
+                        <div class="glass-card p-4 p-lg-5 h-100">
+                            <h3 class="mb-4 fw-bold section-title"><i class="bi bi-cpu text-info me-2"></i>Registro de Ejecución</h3>
+                            
+                            <!-- Estado Único Vacío -->
+                            <div id="emptyMonitor" class="text-center py-5 text-muted">
+                                <i class="bi bi-hdd-network display-1 text-light-50 mb-3 opacity-25"></i>
+                                <p class="mb-0 text-light-50">Toca alguna de las consultas de la barra lateral para ver su desglose.</p>
+                            </div>
+
+                            <div class="accordion custom-accordion" id="stepsAccordion">
+                                <!-- Renderizado Vía JS -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ANALYTICS TAB -->
+            <div class="tab-pane fade" id="analytics" role="tabpanel" aria-labelledby="analytics-tab">
+                <div class="glass-card p-4 p-lg-5">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h3 class="fw-bold section-title mb-0"><i class="bi bi-pie-chart-fill text-success me-2"></i>Analíticas Globales</h3>
+                        <button class="btn btn-sm btn-outline-danger shadow-glow rounded-3 px-3 py-2" onclick="clearAnalytics()" style="background: rgba(220, 53, 69, 0.1);">
+                            <i class="bi bi-trash me-2"></i>Resetear todas las métricas
+                        </button>
+                    </div>
+                    
+                    <div class="row g-4 mb-5">
+                        <div class="col-sm-6 col-md-3">
+                            <div class="glass-card text-center p-4">
+                                <i class="bi bi-soundwave text-primary fs-1 mb-2"></i>
+                                <h3 class="fw-bold mb-0 text-light" id="stat-total">0</h3>
+                                <p class="text-muted small text-uppercase tracking-wide mb-0">Interacciones</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-3">
+                            <div class="glass-card text-center p-4">
+                                <i class="bi bi-hand-thumbs-up-fill text-success fs-1 mb-2"></i>
+                                <h3 class="fw-bold mb-0 text-light" id="stat-likes">0</h3>
+                                <p class="text-muted small text-uppercase tracking-wide mb-0">Resp. Útiles</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-3">
+                            <div class="glass-card text-center p-4">
+                                <i class="bi bi-hand-thumbs-down-fill text-danger fs-1 mb-2"></i>
+                                <h3 class="fw-bold mb-0 text-light" id="stat-dislikes">0</h3>
+                                <p class="text-muted small text-uppercase tracking-wide mb-0">Resp. No Útiles</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-3">
+                            <div class="glass-card text-center p-4">
+                                <i class="bi bi-graph-up-arrow text-info fs-1 mb-2"></i>
+                                <h3 class="fw-bold mb-0 text-light" id="stat-approval">0%</h3>
+                                <p class="text-muted small text-uppercase tracking-wide mb-0">Aprobación</p>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- Acordeón de Pasos -->
-                    <div class="accordion custom-accordion" id="stepsAccordion">
-                        <!-- Renderizado Vía JS -->
+                    <h4 class="fw-bold section-title mb-4 border-bottom border-secondary border-opacity-25 pb-3">
+                        <i class="bi bi-chat-left-quote text-light-50 me-2"></i>Feedback Directo
+                    </h4>
+                    <div class="row g-3" id="commentsList">
+                        <!-- Comentarios renderizados -->
                     </div>
                 </div>
             </div>
@@ -110,6 +179,60 @@
             </div>
             <h4 class="fw-bold mb-2">Componiendo Solicitud...</h4>
             <p class="text-secondary small mb-0">LangGraph está enrutando a los expertos.</p>
+        </div>
+    </div>
+
+    <!-- Template Mensaje Usuario -->
+    <template id="userMessageTemplate">
+        <div class="d-flex justify-content-end mb-4">
+            <div class="bg-primary-gradient text-white p-3 shadow-glow" style="max-w: 80%; border-radius: 18px 18px 0px 18px;">
+                <p class="mb-0 user-text lh-base"></p>
+            </div>
+        </div>
+    </template>
+
+    <!-- Template Mensaje IA -->
+    <template id="aiMessageTemplate">
+        <div class="d-flex justify-content-start mb-4 flex-column">
+            <div class="glass-card p-4" style="max-w: 90%; border-radius: 18px 18px 18px 0px; border: 1px solid rgba(255,255,255,0.1);">
+                <div class="markdown-body ai-text text-light-50"></div>
+                
+                <!-- Feedback Section -->
+                <div class="d-flex align-items-center gap-2 mt-3 pt-3 border-top border-secondary border-opacity-25 ai-controls">
+                    <button class="btn btn-sm text-secondary hover-success p-1 btn-like" title="Útil"><i class="bi bi-hand-thumbs-up fs-5"></i></button>
+                    <button class="btn btn-sm text-secondary hover-danger p-1 btn-dislike" title="No útil"><i class="bi bi-hand-thumbs-down fs-5"></i></button>
+                    <span class="text-muted ms-2 me-auto" style="font-size: 0.8rem;">|</span>
+                    <button class="btn btn-sm text-info btn-comment fw-semibold px-3 py-1 glass-card" style="border-radius: 20px;">
+                        <i class="bi bi-chat-left-text me-1"></i> Comentar
+                    </button>
+                </div>
+
+                <div class="comment-area mt-3 d-none">
+                    <div class="input-group">
+                        <input type="text" class="form-control bg-dark bg-opacity-50 text-light border-secondary border-opacity-50 shadow-none comment-input" placeholder="Deja tu comentario acerca de la respuesta...">
+                        <button class="btn btn-primary-gradient shadow-glow px-3 btn-submit-comment">Enviar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Confirm Modal -->
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true" data-bs-theme="dark">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content glass-card border-secondary border-opacity-25" style="border-radius: 16px;">
+                <div class="modal-header border-bottom border-light border-opacity-10">
+                    <h5 class="modal-title fw-bold text-light" id="confirmModalLabel">Confirmación</h5>
+                    <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-light-50" id="confirmModalBody" style="font-size: 1.05rem;">
+                    ¿Estás seguro de continuar?
+                </div>
+                <div class="modal-footer border-top border-light border-opacity-10 pb-3">
+                    <button type="button" class="btn btn-outline-secondary rounded-3 px-4 shadow-none btn-cancel-modal" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger rounded-3 px-4 shadow-glow" id="confirmModalBtn">Continuar</button>
+                </div>
+            </div>
         </div>
     </div>
 
