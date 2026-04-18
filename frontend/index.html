@@ -1,16 +1,121 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es" data-bs-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Expertos en Música - Multiagent System</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Expertos en Música - Sistema Multiagente</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container mt-5">
-        <h1>Sistema Multiagente - Expertos en Música</h1>
-        <p>Frontend structure placeholder</p>
+    
+    <!-- Animated Background -->
+    <div class="bg-shape shape-1"></div>
+    <div class="bg-shape shape-2"></div>
+    <div class="bg-shape shape-3"></div>
+
+    <div class="container my-5 content-wrapper">
+        
+        <header class="text-center mb-5 hero-section">
+            <div class="badge-wrapper mb-3">
+                <span class="badge bg-primary-gradient rounded-pill px-3 py-2 text-uppercase tracking-wide shadow-glow">AI Powered</span>
+            </div>
+            <h1 class="display-4 fw-bolder hero-title mb-3">Sistema Multiagente<br><span class="text-gradient">Expertos en Música</span></h1>
+            <p class="lead text-light-50">Explora la teoría, instrumentación y composición con tu equipo musical personal.</p>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <ul class="nav nav-pills custom-tabs mb-4 justify-content-center role" id="appTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="chat-tab" data-bs-toggle="pill" data-bs-target="#chat" type="button" role="tab" aria-controls="chat" aria-selected="true">
+                    <i class="bi bi-chat-dots-fill me-2"></i>Interacción Inicial
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="monitor-tab" data-bs-toggle="pill" data-bs-target="#monitor" type="button" role="tab" aria-controls="monitor" aria-selected="false">
+                    <i class="bi bi-activity me-2"></i>Monitoreo de Agentes
+                </button>
+            </li>
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content" id="appTabsContent">
+            
+            <!-- CHAT TAB -->
+            <div class="tab-pane fade show active" id="chat" role="tabpanel" aria-labelledby="chat-tab">
+                <div class="glass-card mb-4" id="inputContainer">
+                    <div class="card-body p-4 p-lg-5">
+                        <label for="taskInput" class="form-label fw-bold text-light mb-3 ms-1"><i class="bi bi-magic text-warning me-2"></i>¿Qué obra maestra musical vamos a visualizar hoy?</label>
+                        <div class="input-group-custom position-relative">
+                            <textarea class="form-control custom-textarea" id="taskInput" rows="4" placeholder='Ej: "Analiza la composición de una balada de rock alternativo para piano y guitarra acústica..."'></textarea>
+                            <div class="glow-effect"></div>
+                        </div>
+                        <div class="d-flex justify-content-end mt-4">
+                            <button id="sendBtn" class="btn btn-primary-gradient btn-lg px-5 shadow-glow" onclick="submitTask()">
+                                <span>Enviar Tarea <i class="bi bi-send-fill ms-2"></i></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Resultado Final -->
+                <div id="finalResponseWrapper" class="collapse">
+                    <h3 class="mb-3 fw-bold section-title"><i class="bi bi-music-note-list text-primary me-2"></i>Reporte Final</h3>
+                    <div class="glass-card result-card">
+                        <div class="card-body p-4 p-lg-5">
+                            <div id="finalResponseContent" class="markdown-body">
+                                <!-- El Markdown renderizado se inyecta aquí -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MONITORING TAB -->
+            <div class="tab-pane fade" id="monitor" role="tabpanel" aria-labelledby="monitor-tab">
+                <div class="glass-card p-4 p-lg-5">
+                    <h3 class="mb-4 fw-bold section-title"><i class="bi bi-cpu text-info me-2"></i>Registro de Ejecución</h3>
+                    
+                    <!-- Estado Inicial Vacío -->
+                    <div id="emptyMonitor" class="text-center py-5 text-muted">
+                        <i class="bi bi-hdd-network display-1 text-light-50 mb-3 opacity-25"></i>
+                        <p class="mb-0 text-light-50">Las mentes maestras están a la espera. Envía una tarea en la pestaña anterior.</p>
+                    </div>
+
+                    <!-- Acordeón de Pasos -->
+                    <div class="accordion custom-accordion" id="stepsAccordion">
+                        <!-- Renderizado Vía JS -->
+                    </div>
+                </div>
+            </div>
+            
+        </div>
     </div>
+
+    <!-- Global Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay d-none">
+        <div class="text-center glass-card p-5 loader-box">
+            <div class="music-bars mb-4">
+                <span></span><span></span><span></span><span></span><span></span>
+            </div>
+            <h4 class="fw-bold mb-2">Componiendo Solicitud...</h4>
+            <p class="text-secondary small mb-0">LangGraph está enrutando a los expertos.</p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>

@@ -19,7 +19,7 @@ async def run_task(request: TaskRequest):
     initial_state = {"messages": [HumanMessage(content=request.task)]}
     
     agent_steps = []
-    final_response = ""
+    redactor_output = ""
     
     for output in graph.stream(initial_state):
         for node_name, node_state in output.items():
@@ -32,9 +32,15 @@ async def run_task(request: TaskRequest):
                     "content": safe_text
                 })
                 
-                final_response = safe_text
+                # Rescatar únicamente la respuesta del redactor como output final
+                if node_name == "redactor":
+                    redactor_output = safe_text
+
+    # Mecanismo de fallback por si el redactor falla o no emite nada
+    if not redactor_output:
+        redactor_output = "Error: El agente redactor no emitió ningún reporte estructurado válido."
 
     return {
-        "final_response": final_response,
+        "final_response": redactor_output,
         "steps": agent_steps
     }

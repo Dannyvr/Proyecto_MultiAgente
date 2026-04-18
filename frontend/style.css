@@ -1,0 +1,245 @@
+:root {
+    --bg-color-main: #120e06;
+    --primary-color: #f59e0b;
+    --secondary-color: #d97706;
+    --tertiary-color: #fbbf24;
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(255, 255, 255, 0.08);
+}
+
+body {
+    background-color: var(--bg-color-main);
+    color: #e2e8f0;
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6, .brand {
+    font-family: 'Outfit', sans-serif;
+}
+
+/* Animated Background Shapes */
+.bg-shape {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(120px);
+    z-index: -1;
+    opacity: 0.6;
+    animation: drift 20s infinite alternate ease-in-out;
+}
+.shape-1 {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, var(--tertiary-color), transparent 70%);
+    top: -10%; left: -10%;
+}
+.shape-2 {
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, var(--primary-color), transparent 70%);
+    bottom: -20%; right: -10%;
+    animation-delay: -5s;
+}
+.shape-3 {
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, var(--secondary-color), transparent 70%);
+    bottom: 30%; left: 30%;
+    animation-delay: -10s;
+}
+
+@keyframes drift {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(50px, 30px) scale(1.1); }
+}
+
+/* Glassmorphism Styles */
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Buttons & Gradients */
+.text-gradient {
+    background: linear-gradient(135deg, var(--secondary-color), var(--primary-color), var(--tertiary-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+}
+
+.bg-primary-gradient {
+    background: linear-gradient(135deg, var(--primary-color), var(--tertiary-color));
+    border: none;
+    color: white;
+}
+
+.btn-primary-gradient {
+    background: linear-gradient(135deg, var(--primary-color), var(--tertiary-color));
+    border: none;
+    color: white;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-primary-gradient:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(245, 158, 11, 0.4);
+    color: white;
+}
+
+.shadow-glow {
+    box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+}
+
+/* Text Area */
+.custom-textarea {
+    background: rgba(11, 15, 25, 0.6) !important;
+    border: 1px solid var(--glass-border);
+    color: white;
+    border-radius: 12px;
+    padding: 1.25rem;
+    font-size: 1.1rem;
+    box-shadow: inset 0 2px 10px rgba(0,0,0,0.2);
+    resize: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.custom-textarea:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.15), inset 0 2px 10px rgba(0,0,0,0.2);
+    color: white;
+    outline: none;
+}
+.custom-textarea::placeholder {
+    color: rgba(255,255,255,0.2);
+}
+
+/* Custom Tabs */
+.custom-tabs {
+    border-bottom: 0;
+    gap: 15px;
+}
+.custom-tabs .nav-link {
+    color: rgba(255, 255, 255, 0.6);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 30px;
+    padding: 10px 30px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+.custom-tabs .nav-link:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: white;
+}
+.custom-tabs .nav-link.active {
+    background: var(--primary-color);
+    box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+    color: white;
+    border-color: transparent;
+}
+
+/* Accordion */
+.custom-accordion .accordion-item {
+    background: transparent;
+    border: none;
+    margin-bottom: 15px;
+}
+.custom-accordion .accordion-button {
+    background: rgba(255, 255, 255, 0.03);
+    color: #fff;
+    border: 1px solid var(--glass-border);
+    border-radius: 12px !important;
+    padding: 1.25rem;
+    font-weight: 600;
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.1rem;
+    text-transform: capitalize;
+}
+.custom-accordion .accordion-button:not(.collapsed) {
+    background: linear-gradient(90deg, rgba(245, 158, 11, 0.1) 0%, transparent 100%);
+    box-shadow: none;
+    color: var(--tertiary-color);
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+.custom-accordion .accordion-button::after {
+    filter: invert(1);
+}
+.custom-accordion .accordion-collapse {
+    border: 1px solid var(--glass-border);
+    border-top: none;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    background: rgba(0,0,0,0.2);
+}
+
+/* Loading Overlay & Animation */
+.loading-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(11, 15, 25, 0.85);
+    backdrop-filter: blur(8px);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.3s;
+}
+.loader-box {
+    border-radius: 24px;
+    min-width: 300px;
+}
+.music-bars {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 6px;
+    height: 40px;
+}
+.music-bars span {
+    display: block;
+    width: 6px;
+    height: 10px;
+    background: var(--tertiary-color);
+    border-radius: 10px;
+    animation: bounce 0.5s infinite alternate ease-in;
+}
+.music-bars span:nth-child(2) { animation-delay: 0.1s; background: var(--primary-color);}
+.music-bars span:nth-child(3) { animation-delay: 0.2s; background: var(--secondary-color);}
+.music-bars span:nth-child(4) { animation-delay: 0.3s; background: var(--primary-color);}
+.music-bars span:nth-child(5) { animation-delay: 0.4s; background: var(--tertiary-color);}
+
+@keyframes bounce {
+    0% { height: 10px; }
+    100% { height: 40px; }
+}
+
+/* Markdown Rendering Customization */
+.markdown-body {
+    font-size: 1.05rem;
+    line-height: 1.7;
+}
+.markdown-body h1, .markdown-body h2, .markdown-body h3 {
+    color: #fff;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+.markdown-body h2 {
+    border-bottom: 1px solid var(--glass-border);
+    padding-bottom: 0.5rem;
+}
+.markdown-body strong {
+    color: var(--secondary-color);
+}
+.markdown-body ul, .markdown-body ol {
+    padding-left: 1.5rem;
+}
+.markdown-body li {
+    margin-bottom: 0.5rem;
+}

@@ -56,11 +56,12 @@ def verificador(state: AgentState):
     # Temperatura más baja para el verificador para obtener mayor rigor y consistencia.
     llm = get_llm(temperature=0.2)
     system_msg = SystemMessage(content=(
-        "Eres el Agente Verificador. "
-        "Tu trabajo es revisar toda la conversación con un ojo crítico enfocado en el resultado "
-        "entregado por el Redactor. Debes validar que la teoría musical expuesta sea rigurosamente "
-        "correcta, que la instrumentación tenga sentido acústico, y que se haya cumplido al 100% "
-        "con la tarea original del usuario. Emite una breve calificación y el dictamen final del producto."
+        "Eres el Agente Verificador (Auditor de Calidad). "
+        "¡REGLA ABSOLUTA!: NO vuelvas a escribir la guía musical ni generes contenido nuevo derivado. "
+        "Tu ÚNICO trabajo es evaluar y criticar el trabajo entregado por el 'Redactor'. "
+        "Emite un dictamen final de la calidad técnica y armónica, otorga una calificación "
+        "explícita del 1 al 10, y da un breve veredicto (máximo 3-4 líneas) justificando tu nota "
+        "respecto a la petición musical original. Compórtate estrictamente como un auditor."
     ))
     response = llm.invoke([system_msg] + state["messages"])
     return {"messages": [response], "sender": "verificador"}
