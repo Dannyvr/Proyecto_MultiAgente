@@ -319,11 +319,19 @@ async function loadAnalytics() {
 
 // Helpers
 function toggleLoader(show) {
-    const overlay = document.getElementById('loadingOverlay');
     if (show) {
-        overlay.classList.remove('d-none');
+        const template = document.getElementById('loadingMessageTemplate');
+        if (template) {
+            const clone = template.content.cloneNode(true);
+            const chatHistory = document.getElementById('chatHistory');
+            chatHistory.appendChild(clone);
+            scrollChat();
+        }
     } else {
-        overlay.classList.add('d-none');
+        const activeLoader = document.getElementById('inlineLoaderContainer');
+        if (activeLoader) {
+            activeLoader.remove();
+        }
     }
 }
 

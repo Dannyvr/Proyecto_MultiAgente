@@ -1,8 +1,8 @@
-# Proyecto MultiAgente - Expertos en Música
+# HARMONYIA - Sistema Multiagente de Expertos en Música
 
-Este proyecto consiste en el desarrollo de un **Sistema Multiagente Especializado en Música**, utilizando tecnologías como **LangGraph**, **FastAPI** y los modelos de lenguaje de **Azure AI Foundry**. 
+Este proyecto consiste en el desarrollo de un **Sistema Multiagente Especializado en Música**, orquestado por **LangGraph**, servido mediante **FastAPI**, interactuado por una UI en **Vanilla JS y Bootstrap 5** bajo un estética Glassmorphism, y potenciado en conocimiento por los modelos de **Azure AI Foundry**. 
 
-El sistema utiliza varios agentes (Planificador, Especialista en Instrumentación, Especialista en Composición, Redactor y Verificador) que colaboran para analizar y generar contenido musical técnico y detallado.
+El sistema utiliza varios agentes (Planificador, Especialista en Instrumentación, Especialista en Composición, Redactor y Verificador) que colaboran de manera encadenada para analizar y generar contenido musical técnico y detallado. Integra **memoria conversacional persistente** y **recolección de analíticas** a través de una base de datos distribuida en JSON.
 
 ---
 
@@ -11,34 +11,34 @@ El sistema utiliza varios agentes (Planificador, Especialista en Instrumentació
 ```text
 /Proyecto_MultiAgente
 │
-├── /backend                    # Lógica de servidor y agentes
-│   ├── /Agents                 # Definición de configuraciones y conexión a los LLMs
-│   │   ├── config.py           # Configuraciones de entorno (Pydantic Settings)
-│   │   └── llm_provider.py     # Proveedor de conexión a Azure OpenAI
-│   ├── /Apis                   # (Próximamente) Rutas y Endpoints de FastAPI
-│   ├── __init__.py
-│   └── test_azure.py           # Script para probar la conexión con el LLM en Azure
+├── /backend                    # Lógica de servidor, orquestación y DB
+│   ├── /Agents                 # Configuración de LLM (AzureProvider), sub-agentes y flujo de LangGraph
+│   ├── /Apis                   # Rutas y Endpoints REST de FastAPI (api.py)
+│   ├── /database               # Almacenamiento local de memoria mediante JSON (database.py)
+│   └── main.py                 # Punto de entrada y middlewares (CORS) de FastAPI
 │
-├── /frontend                   # Interfaz de usuario (Chat y Monitoreo)
-│   └── index.html              # Estructura principal del Frontend
+├── /frontend                   # Interfaz visual de usuario para Chat, Monitoreo y Métricas
+│   ├── index.html              # Capa estructural (Layout moderno en Sidebar + Grid)
+│   ├── style.css               # Definiciones y animación del visual Glassmorphism
+│   └── app.js                  # Lógica de UX, Modales interactivos, feedback loop y Peticiones asíncronas
 │
 ├── /Contexto                   # Documentación inicial y especificaciones
-│   └── contexto.md             # Detalles de diseño, fases y arquitectura
+│   └── contexto.md             # Detalles de diseño, fases y arquitectura propuesta original
 │
-├── .env                        # Variables de entorno (Azure credentials) [No incluido en repositorio]
-├── .gitignore                  # Archivos ignorados por Git
-├── requirements.txt            # Dependencias de Python instaladas
-├── LICENSE                     # Licencia del proyecto
-└── README.md                   # Documentación del proyecto (Este archivo)
+├── .env                        # Variables confidenciales requeridas (Azure credentials) [No incluido]
+├── requirements.txt            # Gestor de dependencias de Backend en Python
+└── README.md                   # Documentación centralizada del proyecto (Este archivo)
 ```
 
 ---
 
-## ⚙️ Requisitos Previos
+## ⚙️ Características Clave Implementadas
 
-- **Python 3.10+**  
-- **Cuenta en Azure AI Foundry** (Despliegue activo de modelo de lenguaje, en este caso `gpt-4.1-mini`).
-- **Git**
+1. **Orquestación Multiagente Inteligente (LangGraph):** Ruteo especializado de tareas musicales en nodos conversacionales.
+2. **Back-End API REST Modernizado (FastAPI):** Arquitectura modular mediante endpoints separados con `APIRouter` para orquestación de LLM (`/run_task`), memoria (`/history`), feedback directo y reportería paralela (`/analytics`).
+3. **Memoria y Persistencia de Sesión Local:** Base de datos ligera en formato `.json` (`db.json`) que retiene preguntas, respuestas y rastro de interacciones paso-a-paso de los agentes basado en un identificador UUID nativo.
+4. **Ciclo de Retroalimentación de Calidad y Dashboard Analítico:** Flujo en que el usuario puede calificar cada respuesta individual de los agentes. Esto alimenta dinámicamente gráficos tabulados calculados y renderizados en un panel exclusivo del frontend que tabula todo, desde porcentaje de aprobación hasta críticas constructivas de los usuarios.
+5. **UI/UX Innovadora y Autocontenida:** Pestañas visuales de uso intuitivo sin necesidad de navegar a múltiples URLs. Animaciones dinámicas, carga *in-line*, modales nativos para evitar cajas de alertas destructivas, entre otras.
 
 ---
 
@@ -60,33 +60,41 @@ El sistema utiliza varios agentes (Planificador, Especialista en Instrumentació
    source .venv/bin/activate
    ```
 
-3. **Instalar dependencias:**
+3. **Instalar dependencias necesarias:**
    ```bash
    pip install -r requirements.txt
    ```
 
-4. **Configurar Variables de Entorno:**
-   Crea un archivo `.env` en la raíz del proyecto y agrega tus datos de Azure:
+4. **Variables de Entorno Clave:**
+   Crea un archivo `.env` en la raíz del entorno e incluye tus métricas de Azure:
    ```env
    AZURE_OPENAI_API_KEY="tu_api_key_aqui"
    AZURE_OPENAI_ENDPOINT="tu_endpoint_aqui"
    ```
 
-5. **Probar la conexión con Azure (Fase 1 completada):**
-   Asegúrate de estar en el directorio raíz y ejecuta:
+5. **Levantando el Sistema:**
+   El proyecto opera en dos ambientes simultáneos (servidor lógico y estático).
+
+   **Terminal 1 (Backend de FastAPI):**
    ```bash
-   python backend/test_azure.py
+   uvicorn backend.main:app --reload
    ```
-   Si la configuración es correcta, recibirás una respuesta del experto en música simulado vía LLM.
+   *(El cerebro corre por defecto en http://127.0.0.1:8000)*
+
+   **Terminal 2 (Servidor Frontend HTML/JS/CSS):**
+   ```bash
+   python -m http.server 8080 --directory frontend
+   ```
+   *(Abra desde el navegador http://127.0.0.1:8080 para ingresar a la UI principal)*
 
 ---
 
-## 📅 Fases de Desarrollo
+## 📅 Estado de Desarrollo Integrado
 
-Según las especificaciones del proyecto (`Contexto/contexto.md`), el desarrollo se divide en:
+El total de las fases operativas de acuerdo a la documentación matriz ya se ha superado y refinado:
 
-- **Fase 1:** Infraestructura y Conexión (✅ *Completada*).
-- **Fase 2:** Capa de Orquestación con LangGraph (Definición del estado y grafo de control).
-- **Fase 3:** Implementación de Agentes Especialistas en Música (Lógica y Prompts de Instrumentos, Composición y Redacción).
-- **Fase 4:** Capa de API FastAPI (Endpoints de Chat y Streaming para monitoreo).
-- **Fase 5:** Interfaz Web Frontend (Chat en HTML/JS con panel de monitoreo visual).
+- **Fase 1:** Arquitectura, Entorno y Conexión Cloud (Azure). (✅ *Completada*).
+- **Fase 2:** Capilla de Orquestación LLM mediante LangGraph. (✅ *Completada*).
+- **Fase 3:** Parametrización en Prompts de Modelos Reactivos (Agentes expertos). (✅ *Completada*).
+- **Fase 4:** Migración REST con FastAPI, Memoria Persistente de Sesiones y Funciones Analíticas. (✅ *Completada*).
+- **Fase 5:** Empoderamiento de un super Dashboard en Frontend (Vanilla JS + Bootstrap). (✅ *Completada*).

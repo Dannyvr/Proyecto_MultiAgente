@@ -24,37 +24,43 @@
     <div class="bg-shape shape-2"></div>
     <div class="bg-shape shape-3"></div>
 
-    <div class="container my-4 content-wrapper">
-        
-        <header class="text-center mb-4 hero-section">
-            <h1 class="display-4 fw-bolder hero-title mb-0"><span class="text-gradient">HARMONYIA</span> Multiagente</h1>
-        </header>
+    <div class="container-fluid px-3 px-xl-5 my-4 content-wrapper">
+        <div class="row w-100 mx-auto" style="max-width: 1500px;">
+            
+            <!-- Sidebar Left: Title & Tabs -->
+            <div class="col-lg-3 col-xl-2 mb-4 mb-lg-0">
+                <header class="mb-5 hero-section ms-2">
+                    <h1 class="fw-bolder hero-title mb-0" style="font-size: 2.1rem; line-height: 1.1;"><span class="text-gradient">HARMONYIA</span><br><span class="fs-5 text-light-50 fw-normal">Multiagente</span></h1>
+                </header>
 
-        <!-- Navigation Tabs -->
-        <ul class="nav nav-pills custom-tabs mb-4 justify-content-center role" id="appTabs" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="chat-tab" data-bs-toggle="pill" data-bs-target="#chat" type="button" role="tab" aria-controls="chat" aria-selected="true">
-                    <i class="bi bi-chat-dots-fill me-2"></i>Interacción Inicial
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="monitor-tab" data-bs-toggle="pill" data-bs-target="#monitor" type="button" role="tab" aria-controls="monitor" aria-selected="false">
-                    <i class="bi bi-activity me-2"></i>Monitoreo de Agentes
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="analytics-tab" data-bs-toggle="pill" data-bs-target="#analytics" type="button" role="tab" aria-controls="analytics" aria-selected="false" onclick="loadAnalytics()">
-                    <i class="bi bi-bar-chart-fill me-2"></i>Métricas y Calidad
-                </button>
-            </li>
-        </ul>
+                <!-- Navigation Tabs -->
+                <ul class="nav nav-pills custom-tabs flex-column" id="appTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active w-100 text-start" id="chat-tab" data-bs-toggle="pill" data-bs-target="#chat" type="button" role="tab" aria-controls="chat" aria-selected="true">
+                            <i class="bi bi-chat-dots-fill me-2"></i>Interacción
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link w-100 text-start" id="monitor-tab" data-bs-toggle="pill" data-bs-target="#monitor" type="button" role="tab" aria-controls="monitor" aria-selected="false">
+                            <i class="bi bi-activity me-2"></i>Monitoreo
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link w-100 text-start" id="analytics-tab" data-bs-toggle="pill" data-bs-target="#analytics" type="button" role="tab" aria-controls="analytics" aria-selected="false" onclick="loadAnalytics()">
+                            <i class="bi bi-bar-chart-fill me-2"></i>Métricas
+                        </button>
+                    </li>
+                </ul>
+            </div>
 
-        <!-- Tab Content -->
-        <div class="tab-content" id="appTabsContent">
+            <!-- Main Right Content -->
+            <div class="col-lg-9 col-xl-10 h-100">
+                <!-- Tab Content -->
+                <div class="tab-content h-100" id="appTabsContent">
             
             <!-- CHAT TAB -->
             <div class="tab-pane fade show active" id="chat" role="tabpanel" aria-labelledby="chat-tab">
-                <div class="glass-card mb-4 d-flex flex-column" style="height: 75vh;">
+                <div class="glass-card mb-4 d-flex flex-column" style="height: 82vh;">
                     <!-- Botón de Limpiar Conversación -->
                     <div class="d-flex justify-content-end p-2 border-bottom border-secondary border-opacity-25">
                         <button class="btn btn-sm btn-outline-danger border-0 shadow-none d-flex align-items-center" onclick="clearChat()">
@@ -168,19 +174,24 @@
                 </div>
             </div>
             
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Global Loading Overlay -->
-    <div id="loadingOverlay" class="loading-overlay d-none">
-        <div class="text-center glass-card p-5 loader-box">
-            <div class="music-bars mb-4">
-                <span></span><span></span><span></span><span></span><span></span>
+    <!-- Template Mensaje IA Cargando -->
+    <template id="loadingMessageTemplate">
+        <div class="d-flex justify-content-start mb-4 flex-column" id="inlineLoaderContainer">
+            <div class="glass-card p-3 px-4 d-flex align-items-center gap-3 shadow-glow" style="max-width: 80%; border-radius: 18px 18px 18px 0px; border: 1px solid rgba(255,255,255,0.1);">
+                <div class="music-bars" style="transform: scale(0.6); transform-origin: left center; margin: 0; min-width: 50px;">
+                    <span></span><span></span><span></span><span></span><span></span>
+                </div>
+                <div class="text-secondary small fw-medium text-uppercase tracking-wide" style="font-size: 0.75rem;">
+                    LangGraph reuniendo a los expertos...
+                </div>
             </div>
-            <h4 class="fw-bold mb-2">Componiendo Solicitud...</h4>
-            <p class="text-secondary small mb-0">LangGraph está enrutando a los expertos.</p>
         </div>
-    </div>
+    </template>
 
     <!-- Template Mensaje Usuario -->
     <template id="userMessageTemplate">
